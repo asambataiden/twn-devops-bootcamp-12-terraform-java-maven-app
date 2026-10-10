@@ -45,15 +45,18 @@ pipeline {
           script {
               dir('terraform') {
 
-                sh '''
-                    set -eu
+                    sh '''
+                        set -eu
 
-                    terraform init \
-                      -migrate-state \
-                      -force-copy \
-                      -input=false
+                        terraform init \
+                          -migrate-state \
+                          -force-copy \
+                          -input=false
 
-                '''
+                        terraform validate
+                        terraform plan -out=tfplan -input=false
+                        terraform apply -input=false tfplan
+                    '''
 
                   env.EC2_PUBLIC_IP = sh(
                       script: 'terraform output -raw ec2_public_ip',
