@@ -48,14 +48,10 @@ pipeline {
                     sh '''
                         set -eu
 
-                        terraform init \
-                          -migrate-state \
-                          -force-copy \
-                          -input=false
-
+                        terraform init -input=false
                         terraform validate
                         terraform plan -out=tfplan -input=false
-                        terraform apply -input=false tfplan
+                        terraform apply -input=false -auto-approve tfplan
                     '''
 
                   env.EC2_PUBLIC_IP = sh(
