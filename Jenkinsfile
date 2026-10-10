@@ -42,16 +42,19 @@ pipeline {
         TF_VAR_env_prefix = 'test'
       }
       steps {
-        script {
-          dir('terraform') {
-            sh 'terraform init'
-            sh 'terraform apply --auto-approve'
-            env.EC2_PUBLIC_IP = sh(
-              script: 'terraform output ec2_public_ip',
-              returnStdout: true
-            ).trim()
+          script {
+              dir('terraform') {
+                  sh 'terraform init'
+                  sh 'terraform apply --auto-approve'
+
+                  env.EC2_PUBLIC_IP = sh(
+                      script: 'terraform output -raw ec2_public_ip',
+                      returnStdout: true
+                  ).trim()
+              }
+
+              echo "EC2 Public IP: ${env.EC2_PUBLIC_IP}"
           }
-        }
       }
     }
 
