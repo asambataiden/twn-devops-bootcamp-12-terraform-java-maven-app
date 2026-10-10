@@ -120,6 +120,10 @@ stage('deploy') {
 
                         echo "Checking Docker Compose installation..."
                         docker compose version
+
+                        echo "Checking disk capacity..."
+                        df -h /
+                        df -h /var/lib/docker
                       '
                 '''
 
