@@ -44,8 +44,16 @@ pipeline {
       steps {
           script {
               dir('terraform') {
-                  sh 'terraform init'
-                  sh 'terraform apply --auto-approve'
+
+                sh '''
+                    set -eu
+
+                    terraform init \
+                      -migrate-state \
+                      -force-copy \
+                      -input=false
+
+                '''
 
                   env.EC2_PUBLIC_IP = sh(
                       script: 'terraform output -raw ec2_public_ip',
